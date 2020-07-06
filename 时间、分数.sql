@@ -10,6 +10,8 @@ SELECT
 	l.courseware_name courseware,
 	m.module_cn_name,
 	m.module_en_name,
+	
+
 -- 	knowledgesub.knowledge knowledge,
 -- 	knowlege.knowledge_type knowledgeType
 	CASE a.node_lid
