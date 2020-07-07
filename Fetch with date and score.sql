@@ -58,104 +58,104 @@ SELECT
 	
 -- 	a.quiz_id,
 	
--- 	CASE
--- 	WHEN a.node_lid IS NOT NULL AND a.node_lid <> '' AND a.node_lid != '-1' THEN
--- 		(
--- 		SELECT
--- 			ks.knowledge
--- 		FROM
--- 			xes_engine_tree_node n
--- 			JOIN xes_knowledge k ON k.lid = n.knowledge_lid
+	CASE
+	WHEN a.node_lid IS NOT NULL AND a.node_lid <> '' AND a.node_lid != '-1' THEN
+		(
+		SELECT
+			ks.knowledge
+		FROM
+			xes_engine_tree_node n
+			JOIN xes_knowledge k ON k.lid = n.knowledge_lid
+			JOIN xes_knowledge_sub ks ON ks.knowledge_lid = k.lid
+		WHERE
+			a.node_lid = n.lid
+			
+		LIMIT 1
+		)
+	ELSE
+		CASE a.speaking_lid
+		WHEN  NULL THEN
+			CASE
+			WHEN a.quiz_id IS NOT NULL AND a.quiz_id <> '' THEN
+			(
+			SELECT
+				ks.knowledge
+			FROM
+				xes_quiz q
+			JOIN xes_knowledge k ON k.lid = q.knowledge_lid
+			JOIN xes_knowledge_sub ks ON ks.knowledge_lid = k.lid
+			WHERE
+				a.quiz_id = q.id
+			
+			LIMIT 1
+			)
+			ELSE
+				''
+			END
+		ELSE
+			(
+			SELECT
+				ks.knowledge
+			FROM
+				xes_speaking s
+			JOIN xes_knowledge k ON k.lid = s.knowledge_lid
+			JOIN xes_knowledge_sub ks ON ks.knowledge_lid = k.lid
+			WHERE
+				a.speaking_lid = s.lid
+			
+			LIMIT 1
+			)
+		END
+	END AS knowledge,
+	
+	
+	CASE
+	WHEN a.node_lid IS NOT NULL AND a.node_lid <> '' THEN
+		(
+		SELECT
+			k.knowledge_type
+		FROM
+			xes_engine_tree_node n
+			JOIN xes_knowledge k ON k.lid = n.knowledge_lid
+		WHERE
+			a.node_lid = n.lid
+			
+		LIMIT 1
+		)
+	ELSE
+		CASE a.speaking_lid
+		WHEN  NULL THEN
+			CASE
+			WHEN a.quiz_id IS NOT NULL AND a.quiz_id <> '' THEN
+			(
+			SELECT
+				k.knowledge_type
+			FROM
+				xes_quiz q
+			JOIN xes_knowledge k ON k.lid = q.knowledge_lid
 -- 			JOIN xes_knowledge_sub ks ON ks.knowledge_lid = k.lid
--- 		WHERE
--- 			a.node_lid = n.lid
--- 			
--- 		LIMIT 1
--- 		)
--- 	ELSE
--- 		CASE a.speaking_lid
--- 		WHEN  NULL THEN
--- 			CASE
--- 			WHEN a.quiz_id IS NOT NULL AND a.quiz_id <> '' THEN
--- 			(
--- 			SELECT
--- 				ks.knowledge
--- 			FROM
--- 				xes_quiz q
--- 			JOIN xes_knowledge k ON k.lid = q.knowledge_lid
--- 			JOIN xes_knowledge_sub ks ON ks.knowledge_lid = k.lid
--- 			WHERE
--- 				a.quiz_id = q.id
--- 			
--- 			LIMIT 1
--- 			)
--- 			ELSE
--- 				''
--- 			END
--- 		ELSE
--- 			(
--- 			SELECT
--- 				ks.knowledge
--- 			FROM
--- 				xes_speaking s
--- 			JOIN xes_knowledge k ON k.lid = s.knowledge_lid
--- 			JOIN xes_knowledge_sub ks ON ks.knowledge_lid = k.lid
--- 			WHERE
--- 				a.speaking_lid = s.lid
--- 			
--- 			LIMIT 1
--- 			)
--- 		END
--- 	END AS knowledge,
--- 	
--- 	
--- 	CASE
--- 	WHEN a.node_lid IS NOT NULL AND a.node_lid <> '' THEN
--- 		(
--- 		SELECT
--- 			k.knowledge_type
--- 		FROM
--- 			xes_engine_tree_node n
--- 			JOIN xes_knowledge k ON k.lid = n.knowledge_lid
--- 		WHERE
--- 			a.node_lid = n.lid
--- 			
--- 		LIMIT 1
--- 		)
--- 	ELSE
--- 		CASE a.speaking_lid
--- 		WHEN  NULL THEN
--- 			CASE
--- 			WHEN a.quiz_id IS NOT NULL AND a.quiz_id <> '' THEN
--- 			(
--- 			SELECT
--- 				k.knowledge_type
--- 			FROM
--- 				xes_quiz q
--- 			JOIN xes_knowledge k ON k.lid = q.knowledge_lid
--- -- 			JOIN xes_knowledge_sub ks ON ks.knowledge_lid = k.lid
--- 			WHERE
--- 				a.quiz_id = q.id
--- 			
--- 			LIMIT 1
--- 			)
--- 			ELSE
--- 				''
--- 			END
--- 		ELSE
--- 			(
--- 			SELECT
--- 				k.knowledge_type
--- 			FROM
--- 				xes_speaking s
--- 			JOIN xes_knowledge k ON k.lid = s.knowledge_lid
--- 			WHERE
--- 				a.speaking_lid = s.lid
--- 			
--- 			LIMIT 1
--- 			)
--- 		END
--- 	END AS 				knowledgeType,
+			WHERE
+				a.quiz_id = q.id
+			
+			LIMIT 1
+			)
+			ELSE
+				''
+			END
+		ELSE
+			(
+			SELECT
+				k.knowledge_type
+			FROM
+				xes_speaking s
+			JOIN xes_knowledge k ON k.lid = s.knowledge_lid
+			WHERE
+				a.speaking_lid = s.lid
+			
+			LIMIT 1
+			)
+		END
+	END AS 				knowledgeType,
 	
 		(
 		SELECT
@@ -193,8 +193,8 @@ FROM
 -- 	JOIN xes_user u ON u.lid = a.user_lid
 WHERE
 -- 	u.username = "13681725063" 
-	a.ai_best_score >=91
-	AND a.ai_best_score <=100
+	a.ai_best_score >=81
+	AND a.ai_best_score <=90
 	AND a.create_time >= '2020-06-06 00:00'	
 	AND a.create_time <= '2020-07-06 23:59:59'
 ORDER BY
