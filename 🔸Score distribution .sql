@@ -58,4 +58,4 @@ FROM
 	xes_etn_stu_keyword_check_answer a
 WHERE
 	a.create_time >= '2020-06-28 00:00'
-	AND a.create_time <= '2020-07-06 23:59:59'
+	AND a.create_time < '2020-07-06 00:00'
